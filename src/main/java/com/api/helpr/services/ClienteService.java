@@ -7,63 +7,57 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.api.helpr.domain.Pessoa;
-import com.api.helpr.domain.Tecnico;
-import com.api.helpr.domain.dtos.TecnicoDTO;
+import com.api.helpr.domain.Cliente;
+import com.api.helpr.domain.dtos.ClienteDTO;
 import com.api.helpr.repositories.PessoaRepository;
-import com.api.helpr.repositories.TecnicoRepository;
+import com.api.helpr.repositories.ClienteRepository;
 import com.api.helpr.services.exceptions.DataIntegrityViolationException;
 import com.api.helpr.services.exceptions.ObjectNotFoundException;
 
 @Service
-public class TecnicoService {
+public class ClienteService {
 
-	@Autowired //Vinculo com repositório.
-	private TecnicoRepository repository;
+	@Autowired
+	private ClienteRepository repository;
 
-	@Autowired //Vinculo com repositório de pessoa.
+	@Autowired 
 	private PessoaRepository pessoaRepository;
 
-	//Métoido de busca por um ID no banco.
-	public Tecnico findById(Integer id) {
-		Optional<Tecnico> obj = repository.findById(id);
+	public Cliente findById(Integer id) {
+		Optional<Cliente> obj = repository.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto não foi encontrado: " + id));
 	}
 
-	//Método de busca para todos os registros de técnicos
-	public List<Tecnico> findAllTecnicos() {
+	public List<Cliente> findAllClientes() {
 		return repository.findAll();
 	}
 
-	//Método que fará a criação de novo técnico.
-	public Tecnico create(TecnicoDTO objDto) {
+	public Cliente create(ClienteDTO objDto) {
 		objDto.setId(null);
 		validaCpfEEmail(objDto);
-		Tecnico newObj = new Tecnico(objDto);
+		Cliente newObj = new Cliente(objDto);
 		return repository.save(newObj);
 	}
 
-	//Método para modificar técnicos existentes.
-	public Tecnico update(Integer id, TecnicoDTO objDto) {
+	public Cliente update(Integer id, ClienteDTO objDto) {
 		objDto.setId(id);
-		Tecnico oldObj = findById(id);
+		Cliente oldObj = findById(id);
 		validaCpfEEmail(objDto);
-		oldObj = new Tecnico(objDto);
+		oldObj = new Cliente(objDto);
 		return repository.save(oldObj);
 	}
 	
-	//Excluirá um tecnico pela ordem do endpoint.
 	public void delete(Integer id) {
-		Tecnico obj = findById(id);
+		Cliente obj = findById(id);
 		if(obj.getChamados().size() > 0) {
-			throw new DataIntegrityViolationException("O Tecnico: "+
+			throw new DataIntegrityViolationException("O Cliente: "+
 		id+" tem chamados no sistema: "+
 		obj.getChamados().size());
 		}
 		repository.deleteById(id);
 	}
 	
-	//Validará os CPFs e E-mails para update e create. 
-	private void validaCpfEEmail(TecnicoDTO objDto) {
+	private void validaCpfEEmail(ClienteDTO objDto) {
 
 		Optional<Pessoa> obj = pessoaRepository.findByCpf(objDto.getCpf());
 		if (obj.isPresent() && obj.get().getId() != objDto.getId()) {
@@ -75,4 +69,6 @@ public class TecnicoService {
 			throw new DataIntegrityViolationException("E-mail já cadastrado no sistema!");
 		}
 	}
+
+
 }
