@@ -3,6 +3,8 @@ package com.api.helpr.domain.dtos;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+import javax.validation.constraints.NotNull;
+
 import com.api.helpr.domain.Chamado;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -15,11 +17,18 @@ public class ChamadoDTO implements Serializable{
 	private LocalDate dataAbertura = LocalDate.now();
 	@JsonFormat(pattern = "dd/MM/yyyy")
 	private LocalDate dataFechamento = LocalDate.now();
+	
+	@NotNull(message ="O campo de PRIORIDADE é requerido.")
 	private Integer prioridade;
+	@NotNull(message ="O campo de STATUS é requerido.")
 	private Integer status;
+	@NotNull(message ="O campo de TÍTULO é requerido.")
 	private String titulo;
+	@NotNull(message ="O campo de OBSERVAÇÕES é requerido.")
 	private String observacoes;	
+	@NotNull(message ="Um TÉCNICO precisa estar vinculado.")
 	private Integer tecnico;
+	@NotNull(message ="Um CLIENTE precisa estar vinculado.")
 	private Integer cliente;
 	private String nomeTecnico;
 	private String nomeCliente;
