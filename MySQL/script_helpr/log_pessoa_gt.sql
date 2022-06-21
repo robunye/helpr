@@ -1,6 +1,8 @@
+use helpjava;
 SELECT * FROM pessoa;
-SELECT * FROM log_tecnico_update WHERE id_pessoa = 1;
-
+SELECT * FROM chamado;
+SELECT * FROM log_chamado;
+drop trigger tr_log_update_chamado;
 CREATE TABLE log_tecnico_update(
 id INT NOT NULL AUTO_INCREMENT,
 dt_alteracao DATETIME NOT NULL,
