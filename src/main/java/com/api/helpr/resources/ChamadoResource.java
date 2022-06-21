@@ -8,6 +8,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,6 +42,7 @@ public class ChamadoResource {
 		return ResponseEntity.ok().body(listDto);
 	}
 	
+	@PreAuthorize("hasAnyRole('ROLE_TECNICO')")
 	@PostMapping
 	public ResponseEntity<ChamadoDTO> create(@Valid @RequestBody ChamadoDTO objDto){
 		Chamado obj = service.create(objDto);
@@ -48,6 +50,7 @@ public class ChamadoResource {
 		return ResponseEntity.created(uri).build();
 	}
 	
+	@PreAuthorize("hasAnyRole('ROLE_TECNICO')")
 	@PutMapping(value = "/{id}")
 	public ResponseEntity<ChamadoDTO> update(@PathVariable Integer id, @Valid @RequestBody ChamadoDTO objDto){
 		Chamado newObj = service.update(id, objDto);
