@@ -42,7 +42,14 @@ public class ChamadoResource {
 		return ResponseEntity.ok().body(listDto);
 	}
 	
-	@GetMapping(value="/relatorios/{tecnico}")
+	@GetMapping(value = "/relatorios/cliente/{cliente}")
+	public ResponseEntity<List<ChamadoDTO>> findReportChamadoCliente(@PathVariable Integer cliente) {
+		List<Chamado> reportList = service.reportChamadoCliente(cliente);
+		List<ChamadoDTO> listDto = reportList.stream().map(rel -> new ChamadoDTO(rel)).collect(Collectors.toList());
+		return ResponseEntity.ok().body(listDto);
+	}
+	
+	@GetMapping(value="/relatorios/tecnico/{tecnico}")
 	public ResponseEntity<List<ChamadoDTO>> findReportChamadoTecnico(@PathVariable Integer tecnico){
 		List<Chamado> reportList = service.reportChamadoTecnico(tecnico);
 		List<ChamadoDTO> listDto = reportList.stream().map(rel -> new ChamadoDTO(rel)).collect(Collectors.toList()); 
